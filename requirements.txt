@@ -1,0 +1,3 @@
+pdoc
+flake8
+pytest
