@@ -1,66 +1,42 @@
 # name: Pyhton-package
 
-# on: 
+# env:
+#   AZURE_WEBAPP_NAME: ${{ secrets.AZURE_REGISTRY }}
 
+# on: 
 #   push:
 #     branches: [ "main" ]
 
-#   pull_request:
-#     branches: [ "main" ]
+# permissions:
+#   contents: 'read'
+#   packages: 'write'
 
 # jobs:
 
-#   build-deploy-publish:
+#   build:
       
 #     runs-on: ubuntu-latest
-
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         python-version: ["3.8", "3.9", "3.10"]
 
 #     steps:
 
 #       - uses: actions/checkout@v3
 
-#       - name: Set up Python ${{ matrix.python-version }}
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: ${{ matrix.python-version }}
-
-#       - name: Install python dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-#       # - name: Lint with flake8
-#       #   run: |
-
-#       #     echo "Syntax errors or undefined names:"
-#       #     # stop the build if there are Python syntax errors or undefined names
-#       #     D
-
-#       #     echo "Lines with moth then 127 chars:"
-#       #     # exit-zero treats all errors warnings. The GitHub editor is 127 chars wide
-#       #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
-#       # - name: Test with pytest
-#       #   run: |
-#       #     pytest
-
 #       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v1
+#         uses: docker/setup-buildx-action@v2
 
 #       - name: Login to Azure Container Registry
-#         uses: azure/docker-login@v1
+#         uses: azure/docker-login@v2
 #         with:
-#           login-server: ${{ secrets.AZURE_REGISTRY }}
-#           username: ${{ secrets.AZURE_LOGIN }}
-#           password: ${{ secrets.AZURE_PASSWORD }}
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Lowercase the repo name
+#         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
     
 #       - name: Build and push Docker image
-#         uses: docker/build-push-action@v2
+#         uses: docker/build-push-action@v4
 #         with:
-#             context: .
-#             push: true
-#             tags: ${{ secrets.AZURE_REGISTRY }}/your-image-name:latest
+#           push: true
+#           tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
+#           file: ./Dockerfile
