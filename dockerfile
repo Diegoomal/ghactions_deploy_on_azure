@@ -13,6 +13,8 @@ COPY requirements.txt .
 # Instala as dependências do Python especificadas no requirements.txt
 RUN pip install -r requirements.txt
 
+RUN flake8 . --count --statistics
+
 # Copia todo o conteúdo do diretório src/app para o diretório /app do contêiner
 COPY src/ .
 
