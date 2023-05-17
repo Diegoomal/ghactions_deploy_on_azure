@@ -1,0 +1,5 @@
+flake8
+pdoc
+pytest
+numpy
+pandas
