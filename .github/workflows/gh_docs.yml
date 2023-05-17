@@ -64,7 +64,7 @@ jobs:
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@05ac4e98bfa0f856e6669624239291c73ca27698
+        uses: azure/webapps-deploy@2f47bea0-4c4c-4c7d-b8b2-ae35cfd7f7dc
         with:
           app-name: dockercontainerteste
           publish-profile: dockercontainerteste.azurecr.io
